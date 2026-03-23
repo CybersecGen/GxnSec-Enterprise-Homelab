@@ -1,9 +1,9 @@
 # GxnSec Enterprise Home Lab (Archived)
 
 ## Overview
-GxnSec was a self-built enterprise home lab designed to simulate a small corporate environment. The purpose of the project was to gain hands-on experience with system administration, networking, and security operations by building and testing a controlled virtual infrastructure.
+GxnSec was a self-built enterprise homelab designed to simulate a small corporate IT environment. The project focused on developing practical skills in system administration, networking, and security operations by building and testing a controlled virtual infrastructure.
 
-This repository documents the architecture, configuration approach, issues encountered, and key lessons learned. The lab is no longer active.
+This repository documents the lab design, implementation approach, challenges encountered, and key technical learnings. The environment is no longer active.
 
 ---
 
@@ -11,9 +11,9 @@ This repository documents the architecture, configuration approach, issues encou
 - Build a functional virtual enterprise network
 - Configure and manage Active Directory
 - Deploy and manage multiple operating systems
-- Simulate attack scenarios from an internal adversary
-- Implement basic logging and detection workflows
-- Develop practical troubleshooting skills across systems
+- Simulate internal attack scenarios
+- Implement logging and basic detection workflows
+- Develop troubleshooting skills across systems
 
 ---
 
@@ -26,39 +26,75 @@ This repository documents the architecture, configuration approach, issues encou
 - Kali Linux (attacker machine)
 - Security server (Wazuh SIEM)
 - Security Onion (network monitoring)
-- Postfix email server
+- Mail server (MailHog/Postfix)
 
 ### Network Design
 - Isolated virtual network (no external exposure)
 - Flat subnet configuration
-- Domain-based authentication and internal DNS resolution
+- Internal DNS via Active Directory
+- Domain-based authentication across systems
 
 ---
 
 ## Security Stack
-- SIEM: Wazuh
-- Network monitoring: Security Onion
-- Endpoint logging: Windows Event Logs, Sysmon
-- Attack platform: Kali Linux
+- SIEM: Wazuh  
+- Network Monitoring: Security Onion  
+- Endpoint Logging: Windows Event Logs, Sysmon  
+- Attack Platform: Kali Linux 
 
 ---
 
-## Attack Simulation
-The lab was used to simulate a basic attack chain within a controlled environment:
+## Lab Implementation
 
-1. Reconnaissance (network scanning and enumeration)  
-2. Initial access (credential-based techniques)  
-3. Privilege escalation  
-4. Lateral movement across domain-joined systems  
-5. Detection attempts using SIEM tooling  
+### Virtualisation Setup
+- Installed and configured VirtualBox
+- Configured NAT Network for isolated communication
+- Installed Guest Additions for usability improvements
+- Used snapshots for environment recovery
+
+### Linux Fundamentals
+- File system navigation and management
+- Permissions and user management
+- Bash and shell scripting basics
+- Process control and input/output redirection
+
+### Enterprise Network Build
+- Deployed Active Directory Domain Controller
+- Joined Windows 11 client to domain
+- Provisioned Ubuntu workstation/server
+- Configured corporate server environment
+
+### Supporting Services
+- Configured mail server (MailHog/Postfix)
+- Deployed Security Onion for network monitoring
+- Built security server (Ubuntu) for SIEM
+- Installed and configured Wazuh
+
+### Detection Engineering
+- Created vulnerable scenarios within the lab
+- Configured basic alerts and detection rules in Wazuh
+
+### Attack Simulation
+- Provisioned Kali Linux attacker machine
+- Conducted:
+  - Reconnaissance and enumeration
+  - Initial access (credential-based techniques)
+  - Privilege escalation
+  - Lateral movement
+  - Data exfiltration and persistence
+
+### Defensive Operations
+- Analysed logs and alerts in SIEM
+- Investigated attack activity
+- Validated detection coverage
 
 ---
 
 ## Technologies and Skills
 - Active Directory Domain Services
-- Linux administration (Ubuntu)
+- Linux system administration (Ubuntu)
 - Bash and shell scripting
-- Virtualisation platforms (VirtualBox, UTM)
+- Virtualisation (VirtualBox,VMware,UTM)
 - SIEM deployment and troubleshooting (Wazuh)
 - Network configuration and debugging
 
@@ -67,65 +103,66 @@ The lab was used to simulate a basic attack chain within a controlled environmen
 ## Challenges
 
 ### VM Networking and Synchronisation
-- Inconsistent communication between virtual machines on an isolated network
-- DNS misconfiguration impacting domain functionality
-- Dependency on correct time synchronisation across systems
+- Inconsistent communication between virtual machines
+- DNS misconfiguration affecting domain functionality
+- Time synchronisation issues across systems
 
 ### Wazuh Stability
-- Wazuh would run briefly and then crash
-- Likely due to resource constraints (CPU, memory, disk I/O)
-- Elasticsearch component particularly resource-intensive
+- Frequent crashes after short runtime
+- High resource usage (CPU, memory, disk I/O)
+- Elasticsearch component caused performance bottlenecks
 
 ### Hardware Constraints
 **Primary system:**
 - Lenovo ThinkPad (upgraded)
-  - 16GB DDR4 RAM
+  - 32GB DDR4 RAM
   - 1TB SSD
 
-**Observed issues:**
+**Issues encountered:**
 - CPU bottlenecks under load
-- Performance degradation when running multiple security tools
+- Performance degradation with multiple security tools
 
 ### Platform Limitations
-Migration to a MacBook Pro introduced additional issues:
-- Limited support for x86 virtualisation on Apple Silicon
+Migration to MacBook Pro resulted in:
+- Limited x86 virtualisation support (Apple Silicon)
 - Reduced performance using UTM
-- Compatibility issues with some enterprise tooling
+- Compatibility issues with enterprise tooling
 
 ### Rebuild Cycles
-- Environment was rebuilt multiple times due to instability and configuration errors
-- Frequent reinstallation of virtual machines to troubleshoot issues
+- Environment rebuilt multiple times due to instability
+- Repeated VM reinstallation for troubleshooting
 
 ---
 
 ## Lessons Learned
-- Enterprise-style environments are resource-intensive and require planning around hardware limits
-- Active Directory is highly dependent on correct DNS and network configuration
+- Enterprise environments are resource-intensive and require careful planning
+- Active Directory depends heavily on correct DNS configuration
 - SIEM platforms require dedicated resources to run reliably
-- Building environments incrementally is more effective than deploying all components at once
-- Troubleshooting across systems is a critical skill in both administration and security roles
+- Incremental builds are more effective than full deployments
+- Troubleshooting is a critical skill in both system administration and security roles
 
 ---
 
 ## Project Status
 This project has been archived due to:
 - Hardware limitations
-- Stability issues with security tooling
+- SIEM instability under constrained resources
 - Time cost of repeated rebuilds
 
 ---
 
 ## Future Improvements
 If rebuilt, the following changes would be made:
-- Use cloud infrastructure (e.g. AWS or Azure) to remove hardware constraints
-- Separate SIEM components onto dedicated resources
-- Use infrastructure-as-code (Terraform, Ansible) for repeatable builds
-- Adopt a phased deployment approach
+- Use cloud infrastructure (AWS/Azure) to remove hardware constraints
+- Separate SIEM components onto dedicated systems
+- Implement infrastructure-as-code (Terraform, Ansible)
+- Build and test the environment in phases
+
 
 ---
 
 ## Summary
-This lab provided practical exposure to enterprise systems, network configuration, and security tooling. Although the environment is no longer maintained, the process of building and troubleshooting it provided relevant, hands-on experience aligned with entry-level system administration and security operations roles.
+This lab provided practical exposure to enterprise systems, network configuration, and security tooling. Although the environment is no longer maintained, the process of building and troubleshooting it provided relevant, hands-on experience aligned with system administration and security operations roles.
 
 ---
 
