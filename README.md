@@ -79,7 +79,7 @@ The lab was used to simulate a basic attack chain within a controlled environmen
 ### Hardware Constraints
 **Primary system:**
 - Lenovo ThinkPad (upgraded)
-  - 32GB DDR4 RAM
+  - 16GB DDR4 RAM
   - 1TB SSD
 
 **Observed issues:**
