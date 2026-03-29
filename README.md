@@ -206,8 +206,3 @@ If rebuilt, the following changes would be made:
 
 ## Summary
 This lab provided practical exposure to enterprise systems, network configuration, and security tooling. Although the environment is no longer maintained, the process of building and troubleshooting it provided relevant, hands-on experience aligned with system administration and security operations roles.
-
----
-
-## Author
-Independent home lab project for learning and experimentation in enterprise infrastructure and cybersecurity.
