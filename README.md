@@ -1,15 +1,8 @@
 # Enterprise Security Lab (Implementation & Lessons Learned)
 
 ## Overview
-GxnSec was a self-built enterprise homelab designed to simulate a small corporate IT environment. The project focused on developing practical skills in system administration, networking, and security operations by building and testing a controlled virtual infrastructure.
-
-The lab was built to develop hands-on skills in:
-Security monitoring and detection engineering
-Log analysis and incident investigation
-Active Directory administration
-Network troubleshooting and system hardening
-
-This repository documents the lab design, implementation approach, challenges encountered, and key technical learnings. The environment is no longer active.
+GxnSec is a self-built enterprise homelab simulating a small corporate IT environment. It focused on developing skills in system administration, networking, and security operations through a controlled virtual infrastructure.
+This repository covers the lab’s design, implementation, challenges, and key technical learnings. The environment is no longer active.
 
 ---
 
