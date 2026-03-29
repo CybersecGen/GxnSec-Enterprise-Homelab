@@ -3,6 +3,12 @@
 ## Overview
 GxnSec was a self-built enterprise homelab designed to simulate a small corporate IT environment. The project focused on developing practical skills in system administration, networking, and security operations by building and testing a controlled virtual infrastructure.
 
+The lab was built to develop hands-on skills in:
+Security monitoring and detection engineering
+Log analysis and incident investigation
+Active Directory administration
+Network troubleshooting and system hardening
+
 This repository documents the lab design, implementation approach, challenges encountered, and key technical learnings. The environment is no longer active.
 
 ---
@@ -13,90 +19,134 @@ This repository documents the lab design, implementation approach, challenges en
 - Deploy and manage multiple operating systems
 - Simulate internal attack scenarios
 - Implement logging and basic detection workflows
-- Develop troubleshooting skills across systems
+- Develop troubleshooting skills across systems**
 
 ---
 
 ## Architecture
 
-### Core Systems
-- Windows Server (Active Directory Domain Controller)
-- Windows 11 Enterprise (domain-joined client)
-- Ubuntu Desktop 22.04
-- Kali Linux (attacker machine)
-- Security server (Wazuh SIEM)
-- Security Onion (network monitoring)
-- Mail server (MailHog/Postfix)
+### Core Infrastructure
+Domain Controller: Windows Server (AD DS, DNS, DHCP, SSO)
+Endpoints: Windows 11 Enterprise, Ubuntu Desktop
+Security Stack: Wazuh (SIEM), Security Onion (network monitoring)
+Attack Platform: Kali Linux
+Supporting Services: Mail server (Postfix / MailHog)
 
-### Network Design
-- Isolated virtual network (no external exposure)
-- Flat subnet configuration
-- Internal DNS via Active Directory
-- Domain-based authentication across systems
+---
+
+## Network Configuration
+
+### Virtual Network
+| Setting | Value |
+|--------|------|
+| Network Type | VirtualBox NAT Network |
+| Network Name | `gxnsec-nat` |
+| Subnet | `10.0.0.0/24` |
+| Usable Range | `10.0.0.1 – 10.0.0.254` |
+| DHCP Scope | `10.0.0.100 – 10.0.0.200` |
+
+---
+
+### Host & Role Allocation
+
+| Hostname | IP Address | Role |
+|----------|-----------|------|
+| `gxnsec-dc` | `10.0.0.5` | Domain Controller (DNS, DHCP, SSO) |
+| `gxnsec-admin` | `10.0.0.8` | Corporate Server |
+| `gxnsec-sec-box` | `10.0.0.10` | SIEM / Security Server |
+| `gxnsec-sec-work` | `10.0.0.103` *(DHCP optional)* | Security Monitoring Workstation |
+| `gxnsec-win-client` | `10.0.0.100` *(DHCP)* | Windows Endpoint |
+| `gxnsec-linux-client` | `10.0.0.101` *(DHCP)* | Linux Endpoint |
+| `gxnsec-attacker` | Dynamic | Attacker Machine |
+
+---
+
+## Virtual Machine Specifications
+
+| VM Name | OS | CPU / RAM | Storage |
+|--------|----|-----------|--------|
+| `gxnsec-dc` | Windows Server 2025 | 2 vCPU / 4GB | 50GB |
+| `gxnsec-win-client` | Windows 11 Enterprise | 2 vCPU / 4GB | 80GB |
+| `gxnsec-linux-client` | Ubuntu 22.04 Desktop | 1 vCPU / 2GB | 80GB |
+| `gxnsec-sec-work` | Security Onion | 1 vCPU / 2GB | 55GB |
+| `gxnsec-sec-box` | Ubuntu 22.04 | 2 vCPU / 4GB | 80GB |
+| `gxnsec-corp-svr` | Ubuntu Server 22.04 | 1 vCPU / 2GB | 25GB |
+| `gxnsec-attacker` | Kali Linux 2024.2 | 1 vCPU / 2GB | 55GB |
+
+---
+
+## Identity & Access (Lab Credentials)
+
+| Account | Host | Purpose |
+|--------|------|--------|
+| `Administrator` | Domain Controller | Domain admin |
+| `johnd@corp.gxnsec-dc.com` | Windows Client | Standard user |
+| `janed@linux-client` | Linux Client | Standard user |
+| `gxnsec-sec-work` | Security Workstation | Analyst access |
+| `sec-work@sec-box` | Security Server | SIEM access |
+| `gxnsec-admin@corp-svr` | Corporate Server | Admin account |
+| `attacker@attacker` | Attacker VM | Offensive testing |
 
 ---
 
 ## Security Stack
-- SIEM: Wazuh  
-- Network Monitoring: Security Onion  
-- Endpoint Logging: Windows Event Logs, Sysmon  
-- Attack Platform: Kali Linux 
+
+| Component | Tool | Purpose |
+|----------|------|--------|
+| SIEM | Wazuh | Log collection, correlation, alerting |
+| Network Monitoring | Security Onion | Traffic analysis, IDS |
+| Endpoint Logging | Sysmon + Windows Event Logs | Endpoint visibility |
+| Attack Platform | Kali Linux | Adversary simulation |
+
 
 ---
 
-## Lab Implementation
+## Implementation
 
-### Virtualisation Setup
-- Installed and configured VirtualBox
-- Configured NAT Network for isolated communication
-- Installed Guest Additions for usability improvements
-- Used snapshots for environment recovery
+### 1. Virtualisation & Network Setup
+- Built using VirtualBox NAT Network (isolated environment)
+- Configured internal communication across all hosts
+- Used snapshots for rollback and recovery
 
-### Linux Fundamentals
-- File system navigation and management
-- Permissions and user management
-- Bash and shell scripting basics
-- Process control and input/output redirection
+### 2. Active Directory Deployment
+- Installed and configured Domain Controller
+- Configured DNS for domain resolution
+- Joined Windows client to domain
+- Centralised authentication across systems
 
-### Enterprise Network Build
-- Deployed Active Directory Domain Controller
-- Joined Windows 11 client to domain
-- Provisioned Ubuntu workstation/server
-- Configured corporate server environment
+### 3. System Provisioning
+- Deployed Windows and Linux endpoints
+- Configured user accounts and permissions
+- Built supporting infrastructure (mail server, internal services)
 
-### Supporting Services
-- Configured mail server (MailHog/Postfix)
-- Deployed Security Onion for network monitoring
-- Built security server (Ubuntu) for SIEM
-- Installed and configured Wazuh
-
-### Detection Engineering
-- Created vulnerable scenarios within the lab
-- Configured basic alerts and detection rules in Wazuh
-
-### Attack Simulation
-- Provisioned Kali Linux attacker machine
-- Conducted:
-  - Reconnaissance and enumeration
-  - Initial access (credential-based techniques)
-  - Privilege escalation
-  - Lateral movement
-  - Data exfiltration and persistence
-
-### Defensive Operations
-- Analysed logs and alerts in SIEM
-- Investigated attack activity
-- Validated detection coverage
+### 4. SIEM & Monitoring Deployment
+- Installed Wazuh on dedicated security server
+- Integrated endpoint logging (Sysmon, Windows logs)
+- Deployed Security Onion for network-level monitoring
+- Created basic alerting and detection rules
 
 ---
 
-## Technologies and Skills
-- Active Directory Domain Services
-- Linux system administration (Ubuntu)
-- Bash and shell scripting
-- Virtualisation (VirtualBox,VMware,UTM)
-- SIEM deployment and troubleshooting (Wazuh)
-- Network configuration and debugging
+## Attack Simulation (Red Team Activity)
+
+Simulated realistic attack scenarios using Kali Linux:
+
+- Reconnaissance & enumeration  
+- Credential-based initial access  
+- Privilege escalation  
+- Lateral movement across domain  
+- Persistence techniques  
+- Data exfiltration  
+
+---
+
+## Defensive Operations (SOC Workflow)
+
+- Monitored alerts in Wazuh SIEM  
+- Investigated suspicious activity  
+- Correlated logs across endpoints and network  
+- Validated detection coverage  
+- Identified gaps in visibility and logging  
 
 ---
 
